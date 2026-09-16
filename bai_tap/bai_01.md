@@ -25,7 +25,7 @@ LibreOffice được xây dựng trên cơ sở mã OpenOffice nhưng với:
 
 **Sự suy thoái của OpenOffice**: OpenOffice dần mất đi sự ủng hộ của cộng đồng và các công ty. Năm 2011, Oracle trao OpenOffice cho Apache Software Foundation, nhưng dự án này vẫn không phục hồi được lực hút từ trước đó.
 
-**Thành công của LibreOffice**: Ngược lại, LibreOffice phát triển mạnh mẽ với các bản phát hành thường xuyên, tích hợp c��c tính năng hiện đại, và nhận được sự ủng hộ từ các chính phủ và tổ chức giáo dục trên toàn thế giới.
+**Thành công của LibreOffice**: Ngược lại, LibreOffice phát triển mạnh mẽ với các bản phát hành thường xuyên, tích hợp các tính năng hiện đại, và nhận được sự ủng hộ từ các chính phủ và tổ chức giáo dục trên toàn thế giới.
 
 **Bài học về Quản trị Dự án**: Sự rẽ nhánh này cho thấy tầm quan trọng của việc duy trì sự tin tưởng và minh bạch trong cộng đồng mã nguồn mở. Khi các nhà lãnh đạo dự án không lắng nghe cộng đồng hoặc làm suy yếu giá trị mã nguồn mở, họ có nguy cơ mất đi các thành viên cộng đồng quan trọng.
 
@@ -35,7 +35,7 @@ Trường hợp OpenOffice - LibreOffice minh họa rằng sự thất bại c�
 
 ---
 
-## Bài 1.3: Tragedy of the Commons trong Phần Mềm Mã Nguồn Mở
+## Tragedy of the Commons trong Phần Mềm Mã Nguồn Mở
 
 ### Khái Niệm Tragedy of the Commons
 
