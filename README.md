@@ -16,3 +16,8 @@ Phần mềm mã nguồn mở (Open Source) là nền tảng quan trọng trong 
 | Python | Python Software Foundation License | Ngôn ngữ lập trình đa năng |
 | MySQL | GNU General Public License v2.0 | Hệ quản trị cơ sở dữ liệu quan hệ |
 | LibreOffice | Mozilla Public License 2.0 | Bộ ứng dụng văn phòng mã nguồn mở |
+
+## Giấy phép
+Mã nguồn trong kho này được phát hành
+theo [Giấy phép MIT](LICENSE).
+SPDX-License-Identifier: MIT
