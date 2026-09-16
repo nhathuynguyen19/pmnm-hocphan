@@ -2,7 +2,7 @@
 ## Thông tin cá nhân
 - Họ tên: Nguyễn Đình Nhật Huy.
 - Mã sinh viên: 23T1080025.
-- 
+- Lớp: Phần mềm mã nguồn mở - Nhóm 2 (2026-2027.1.TIN4063.002)
 ## Tại sao tôi muốn học về phần mềm mã nguồn mở?
 
 Phần mềm mã nguồn mở (Open Source) là nền tảng quan trọng trong thế giới công nghệ hiện đại. Tôi muốn học về lĩnh vực này vì nó mang lại cơ hội để tôi[...]
