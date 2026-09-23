@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDGERUNNERS // CALC</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ── Màu nhân vật ─────────────────────────────────── */
+    :root {
+      --lucy:    #a78bfa;   /* tím xanh - Lucy */
+      --rebecca: #f472b6;   /* hồng - Rebecca  */
+      --cyan:    #00ffff;
+      --yellow:  #fbbf24;
+      --bg:      #04020f;
+    }
+
+    /* ── Nền & layout ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas mưa matrix ─────────────────────────────── */
+    #rain {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── Scanlines ─────────────────────────────────────── */
+    #scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ── Card chính ────────────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      background: rgba(4, 2, 15, 0.88);
+      border: 1px solid var(--lucy);
+      box-shadow: 0 0 16px rgba(167, 139, 250, 0.25),
+                  inset 0 0 24px rgba(167, 139, 250, 0.04);
+      padding: 1.75rem;
+    }
+
+    /* ── Tiêu đề glitch ────────────────────────────────── */
+    .glitch {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--cyan);
+      text-align: center;
+      position: relative;
+    }
+    .glitch::before {
+      content: attr(data-text);
+      position: absolute; inset: 0;
+      color: var(--rebecca);
+      clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%);
+      animation: glitch-top 4s infinite;
+    }
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute; inset: 0;
+      color: var(--lucy);
+      clip-path: polygon(0 60%, 100% 60%, 100% 78%, 0 78%);
+      animation: glitch-bot 4s infinite;
+    }
+    @keyframes glitch-top {
+      0%,88%,100% { transform: none; opacity: 0; }
+      90% { transform: translate(-3px,-2px); opacity: 0.8; }
+      94% { transform: translate(3px, 2px); opacity: 0.5; }
+      97% { opacity: 0; }
+    }
+    @keyframes glitch-bot {
+      0%,88%,100% { transform: none; opacity: 0; }
+      91% { transform: translate(3px, 2px); opacity: 0.7; }
+      95% { transform: translate(-3px,-2px); opacity: 0.4; }
+      98% { opacity: 0; }
+    }
+
+    /* ── Badge nhân vật ────────────────────────────────── */
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      padding: 3px 10px;
+      border: 1px solid;
+    }
+    .badge-lucy    { color: var(--lucy);    border-color: var(--lucy);    box-shadow: 0 0 8px var(--lucy); }
+    .badge-rebecca { color: var(--rebecca); border-color: var(--rebecca); box-shadow: 0 0 8px var(--rebecca); }
+
+    /* ── Form ──────────────────────────────────────────── */
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: 1.5rem;
+    }
+    .label-a { color: var(--lucy); }
+    .label-b { color: var(--rebecca); }
+
+    input[type="number"] {
+      flex: 1;
+      background: rgba(167, 139, 250, 0.05);
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      caret-color: var(--rebecca);
+      /* ẩn mũi tên số */
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { display: none; }
+    input[type="number"]:focus {
+      border-color: var(--rebecca);
+      box-shadow: 0 0 10px rgba(244, 114, 182, 0.4);
+    }
+    input::placeholder { color: rgba(0, 255, 255, 0.25); }
+
+    /* ── Nút OK ────────────────────────────────────────── */
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      color: var(--bg);
+      background: linear-gradient(90deg, var(--lucy), var(--rebecca));
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    button[type="submit"]:hover  { opacity: 0.85; }
+    button[type="submit"]:active { transform: scale(0.98); }
+
+    /* ── Bảng kết quả ──────────────────────────────────── */
+    .result-header {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--rebecca);
+      margin-bottom: 0.75rem;
+    }
+    table { width: 100%; font-size: 0.9rem; border-collapse: collapse; }
+    tr { border-bottom: 1px solid rgba(167, 139, 250, 0.15); }
+    tr:last-child { border-bottom: none; }
+    td { padding: 0.5rem 0.25rem; }
+
+    .col-name  { color: var(--lucy); width: 6rem; }
+    .col-expr  { color: rgba(0,255,255,0.4); }
+    .col-value { text-align: right; color: var(--yellow); font-weight: bold; }
+    .col-error { text-align: right; color: #f87171; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Mưa matrix Lucy × Rebecca -->
+  <canvas id="rain"></canvas>
+  <div id="scanlines"></div>
+
+  <main>
+
+    <!-- Tiêu đề -->
+    <div class="panel">
+      <div class="badges">
+        <span class="badge badge-lucy">LUCY</span>
+        <span class="badge badge-rebecca">REBECCA</span>
+      </div>
+      <h1 class="glitch" data-text="EDGERUNNERS">EDGERUNNERS</h1>
+      <p style="text-align:center; font-size:0.65rem; color:rgba(0,255,255,0.3); letter-spacing:0.2em; margin-top:0.4rem;">
+        // ARITHMETIC MODULE
+      </p>
+    </div>
+
+    <!-- Form nhập -->
+    <form method="POST" action="/" class="panel" style="display:flex; flex-direction:column; gap:1rem;">
+
+      <div class="field">
+        <label class="label-a">A</label>
+        <input name="a" type="number" step="any"
+               value="{{ a | default('') }}"
+               placeholder="nhập số A" />
+      </div>
+
+      <div class="field">
+        <label class="label-b">B</label>
+        <input name="b" type="number" step="any"
+               value="{{ b | default('') }}"
+               placeholder="nhập số B" />
+      </div>
+
+      <button type="submit">[ OK — EXECUTE ]</button>
+
+    </form>
+
+    <!-- Kết quả -->
+    {% if tong is defined %}
+    <div class="panel">
+      <p class="result-header">// OUTPUT STREAM</p>
+      <table>
+        <tr>
+          <td class="col-name">Tổng</td>
+          <td class="col-expr">{{ a }} + {{ b }}</td>
+          <td class="col-value">{{ tong }}</td>
+        </tr>
+        <tr>
+          <td class="col-name">Hiệu</td>
+          <td class="col-expr">{{ a }} - {{ b }}</td>
+          <td class="col-value">{{ hieu }}</td>
+        </tr>
+        <tr>
+          <td class="col-name">Tích</td>
+          <td class="col-expr">{{ a }} × {{ b }}</td>
+          <td class="col-value">{{ tich }}</td>
+        </tr>
+        <tr>
+          <td class="col-name">Thương</td>
+          <td class="col-expr">{{ a }} ÷ {{ b }}</td>
+          <td class="{% if thuong == 'Lỗi chia 0' %}col-error{% else %}col-value{% endif %}">{{ thuong }}</td>
+        </tr>
+      </table>
+    </div>
+    {% endif %}
+
+  </main>
+
+  <script>
+    // ── Mưa matrix: ký tự Lucy × Rebecca ──────────────────
+    const canvas = document.getElementById('rain');
+    const ctx    = canvas.getContext('2d');
+
+    const CHARS = 'ルシーレベッカ01アイウエオカキクケコ生死夢愛';
+    const SIZE  = 15;
+    // Lucy = tím, Rebecca = hồng
+    const COLORS = ['#a78bfa', '#f472b6', '#c084fc', '#fb7185'];
+
+    let cols, drops;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cols  = Math.floor(canvas.width / SIZE);
+      drops = Array(cols).fill(1);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(4, 2, 15, 0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = SIZE + 'px monospace';
+
+      drops.forEach((y, i) => {
+        ctx.fillStyle = COLORS[i % COLORS.length];
+        ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * SIZE, y * SIZE);
+        if (y * SIZE > canvas.height && Math.random() > 0.97) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+
+    setInterval(draw, 40);
+  </script>
+
+</body>
+</html>
